@@ -13,6 +13,8 @@ public:
 
 	ABaseCharacter();
 
+	virtual void BeginPlay() override;
+
 protected:
 
 

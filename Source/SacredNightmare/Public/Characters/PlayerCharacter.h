@@ -11,6 +11,9 @@ class SACREDNIGHTMARE_API APlayerCharacter : public ABaseCharacter
 
 private:
 
+	void MoveForward(float Value);
+	void MoveRight(float Value);
+
 protected:
 
 	virtual void BeginPlay() override;
