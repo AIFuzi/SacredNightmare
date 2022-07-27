@@ -6,7 +6,9 @@
 APlayerCharacter::APlayerCharacter()
 {
 	PlayerSpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
-	PlayerSpringArm->SetupAttachment(GetMesh());
+	PlayerSpringArm->SetupAttachment(RootComponent);
+	//PlayerSpringArm->SetupAttachment(GetMesh());
+	PlayerSpringArm->bUsePawnControlRotation = true;
 
 	PlayerCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("PlayerCamera"));
 	PlayerCamera->SetupAttachment(PlayerSpringArm);
