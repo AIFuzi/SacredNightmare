@@ -4,7 +4,6 @@
 #include "Components/ActorComponent.h"
 #include "HealthComponent.generated.h"
 
-
 UCLASS(Blueprintable, BlueprintType, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class SACREDNIGHTMARE_API UHealthComponent : public UActorComponent
 {
@@ -13,5 +12,28 @@ class SACREDNIGHTMARE_API UHealthComponent : public UActorComponent
 public:	
 
 	UHealthComponent();
-	
+
+public:
+
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Health")
+	float MaxHealth;
+
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category="Health")
+	float CurrentHealth;
+
+	UFUNCTION(BlueprintCallable, Category="Health")
+	void DamageChar(float Damage);
+
+	UFUNCTION(Unreliable, Server, WithValidation, Category="Health")
+	void Server_DamageChar(float Damage);
 };
+
+
+
+
+
+
+
+
