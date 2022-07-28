@@ -3,7 +3,7 @@
 
 UHealthComponent::UHealthComponent()
 {
-
+	
 }
 
 void UHealthComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -33,7 +33,7 @@ bool UHealthComponent::Server_GetDamage_Validate(float Damage) { return true; }
 
 void UHealthComponent::StartRegenHealth()
 {
-	GetWorld()->GetTimerManager().SetTimer(RegenHealthTimer, this, &UHealthComponent::RegenHealth, RegenHealthRate, true);
+	if(CurrentHealth < MaxHealth && CurrentHealth > 0.f) GetWorld()->GetTimerManager().SetTimer(RegenHealthTimer, this, &UHealthComponent::RegenHealth, RegenHealthRate, true);
 }
 
 void UHealthComponent::StopRegenHealth()
