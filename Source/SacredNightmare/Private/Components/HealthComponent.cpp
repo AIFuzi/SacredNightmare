@@ -13,14 +13,48 @@ void UHealthComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	DOREPLIFETIME(UHealthComponent, CurrentHealth);
 }
 
-void UHealthComponent::DamageChar(float Damage)
+void UHealthComponent::GetDamage(float Damage)
 {
-	Server_DamageChar(Damage);
+	Server_GetDamage(Damage);
 }
 
-void UHealthComponent::Server_DamageChar_Implementation(float Damage)
+void UHealthComponent::Server_GetDamage_Implementation(float Damage)
 {
-	if(GetOwnerRole() == ROLE_Authority) CurrentHealth -= Damage;
+	if(GetOwnerRole() == ROLE_Authority)
+	{
+		CurrentHealth = CurrentHealth - Damage;
+		CurrentHealth = FMath::Max(CurrentHealth, 0.f);
+		
+		if(CurrentHealth <= 0.f) OnHealthEndedEvent.Broadcast();
+	}
 }
 
-bool UHealthComponent::Server_DamageChar_Validate(float Damage) { return  true; }
+bool UHealthComponent::Server_GetDamage_Validate(float Damage) { return true; }
+
+void UHealthComponent::StartRegenHealth()
+{
+	GetWorld()->GetTimerManager().SetTimer(RegenHealthTimer, this, &UHealthComponent::RegenHealth, RegenHealthRate, true);
+}
+
+void UHealthComponent::StopRegenHealth()
+{
+	GetWorld()->GetTimerManager().ClearTimer(RegenHealthTimer);
+}
+
+void UHealthComponent::RegenHealth()
+{
+	Server_RegenHealth();
+}
+
+void UHealthComponent::Server_RegenHealth_Implementation()
+{
+	if(GetOwnerRole() == ROLE_Authority)
+	{
+		CurrentHealth = CurrentHealth + 1.f;
+		CurrentHealth = FMath::Min(CurrentHealth, MaxHealth);
+
+		if(CurrentHealth >= MaxHealth) StopRegenHealth();
+	}
+}
+
+bool UHealthComponent::Server_RegenHealth_Validate() { return true; }
