@@ -14,8 +14,10 @@ public:
 
 	AItemActor();
 
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	
 	virtual void BeginPlay() override;
-
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="ItemActor")
 	class UBoxComponent* ItemBoxCollision;
 
@@ -27,9 +29,16 @@ public:
 
 	UFUNCTION(BlueprintPure, Category="ItemInfo")
 	int GetCurrentCondition();
+
+	UFUNCTION(BlueprintCallable, Category="Item_Test_Func")
+	void UpdateCondition();
+
+	UFUNCTION(Unreliable, Server, WithValidation, Category="Item_Test_Func")
+	void Server_UpdateCondition();
 	
 private:
 
+	UPROPERTY(Replicated)
 	int CurrentMiningCondition;
 	
 };
