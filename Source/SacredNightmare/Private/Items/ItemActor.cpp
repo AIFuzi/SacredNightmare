@@ -17,3 +17,8 @@ void AItemActor::BeginPlay()
 	
 }
 
+int AItemActor::GetCurrentCondition()
+{
+	return CurrentMiningCondition;
+}
+

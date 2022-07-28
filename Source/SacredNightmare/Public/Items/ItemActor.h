@@ -2,26 +2,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "ItemStructure.h"
 #include "ItemActor.generated.h"
-
-USTRUCT(BlueprintType)
-struct FItemStruct
-{
-	GENERATED_BODY()
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="ItemInfo")
-	FName ItemName;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="ItemInfo")
-	int MiningCondition;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="ItemInfo")
-	int ItemCount;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="ItemInfo")
-	float RegenRate;
-	
-};
 
 UCLASS()
 class SACREDNIGHTMARE_API AItemActor : public AActor
@@ -42,5 +24,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="ItemInfo")
 	FItemStruct ItemStruct;
+
+	UFUNCTION(BlueprintPure, Category="ItemInfo")
+	int GetCurrentCondition();
+	
+private:
+
+	int CurrentMiningCondition;
 	
 };
