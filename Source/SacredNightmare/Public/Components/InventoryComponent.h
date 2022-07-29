@@ -25,6 +25,9 @@ public:
 	UFUNCTION(Unreliable, Server, WithValidation, Category="Inventory")
 	void Server_AddItemToInventory(FItemStruct ItemAdded);
 
+	UFUNCTION(BlueprintPure, Category="Inventory")
+	void FindItemInInventoryByName(FName ItemName, bool& ItemFound, FItemStruct & Item);
+
 private:
 
 	UPROPERTY(Replicated)

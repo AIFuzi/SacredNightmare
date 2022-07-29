@@ -50,3 +50,17 @@ void UInventoryComponent::Server_AddItemToInventory_Implementation(FItemStruct I
 }
 
 bool UInventoryComponent::Server_AddItemToInventory_Validate(FItemStruct ItemAdded) { return true; }
+
+void UInventoryComponent::FindItemInInventoryByName(FName ItemName, bool& ItemFound, FItemStruct& Item)
+{
+	for(int i = 0; i < InventoryArray.Num(); i++)
+	{
+		if(InventoryArray[i].ItemName == ItemName)
+		{
+			Item = InventoryArray[i];
+			ItemFound = true;
+			
+			break;
+		}
+	}
+}
