@@ -5,7 +5,8 @@
 #include "ItemStructure.h"
 #include "ItemActor.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FItemMining);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FItemMiningCooldownStart);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FItemMiningCooldownFinish);
 
 UCLASS()
 class SACREDNIGHTMARE_API AItemActor : public AActor
@@ -30,7 +31,10 @@ public:
 	FItemStruct ItemStruct;
 
 	UPROPERTY(BlueprintAssignable, Category="ItemInfo")
-	FItemMining OnItemMining;
+	FItemMiningCooldownStart OnItemMiningCooldownStart;
+
+	UPROPERTY(BlueprintAssignable, Category="ItemInfo")
+	FItemMiningCooldownFinish OnItemMiningCooldownFinish;
 
 	UFUNCTION(BlueprintPure, Category="ItemInfo")
 	int GetCurrentCondition() const;

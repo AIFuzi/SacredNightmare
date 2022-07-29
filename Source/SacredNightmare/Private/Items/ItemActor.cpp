@@ -47,7 +47,7 @@ void AItemActor::Server_UpdateCondition_Implementation()
 		if(CurrentMiningCondition >= ItemStruct.MiningCondition)
 		{
 			IsMiningCooldown = true;
-			OnItemMining.Broadcast();
+			OnItemMiningCooldownStart.Broadcast();
 			
 			GetWorld()->GetTimerManager().SetTimer(CooldownTimer, this, &AItemActor::ClearCooldown, ItemStruct.RegenRate, false);
 		}
@@ -60,6 +60,8 @@ void AItemActor::ClearCooldown()
 {
 	IsMiningCooldown = false;
 	CurrentMiningCondition = 0;
+	OnItemMiningCooldownFinish.Broadcast();
+	
 	GetWorld()->GetTimerManager().ClearTimer(CooldownTimer);
 }
 
