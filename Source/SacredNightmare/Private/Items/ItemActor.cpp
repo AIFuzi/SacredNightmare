@@ -27,7 +27,7 @@ void AItemActor::BeginPlay()
 	
 }
 
-int AItemActor::GetCurrentCondition()
+int AItemActor::GetCurrentCondition() const
 {
 	return CurrentMiningCondition;
 }
@@ -43,11 +43,28 @@ void AItemActor::Server_UpdateCondition_Implementation()
 	{
 		CurrentMiningCondition++;
 		CurrentMiningCondition = FMath::Min(CurrentMiningCondition, ItemStruct.MiningCondition);
+
+		if(CurrentMiningCondition >= ItemStruct.MiningCondition)
+		{
+			IsMiningCooldown = true;
+			OnItemMining.Broadcast();
+			
+			GetWorld()->GetTimerManager().SetTimer(CooldownTimer, this, &AItemActor::ClearCooldown, ItemStruct.RegenRate, false);
+		}
 	}
 }
 
 bool AItemActor::Server_UpdateCondition_Validate() { return true; }
 
+void AItemActor::ClearCooldown()
+{
+	IsMiningCooldown = false;
+	CurrentMiningCondition = 0;
+	GetWorld()->GetTimerManager().ClearTimer(CooldownTimer);
+}
 
-
+bool AItemActor::GetIsCooldown() const
+{
+	return IsMiningCooldown;
+}
 
