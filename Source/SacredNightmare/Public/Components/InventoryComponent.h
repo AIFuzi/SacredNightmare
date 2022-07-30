@@ -28,6 +28,12 @@ public:
 	UFUNCTION(BlueprintPure, Category="Inventory")
 	void FindItemInInventoryByName(FName ItemName, bool& ItemFound, FItemStruct & Item);
 
+	UFUNCTION(BlueprintCallable, Category="Inventory")
+	void RemoveItemFromInventory(FName ItemName, bool RemoveAll, int Count);
+
+	UFUNCTION(Unreliable, Server, WithValidation, Category="Inventory")
+	void Server_RemoveItemFromInventory(FName ItemName, bool RemoveAll, int Count);
+
 	UFUNCTION(BlueprintCallable, Category="TEST")
 	void TestFuncRetVal(FName Name);
 
