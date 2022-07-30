@@ -28,6 +28,10 @@ public:
 	UFUNCTION(BlueprintPure, Category="Inventory")
 	void FindItemInInventoryByName(FName ItemName, bool& ItemFound, FItemStruct & Item);
 
+	UFUNCTION(BlueprintCallable, Category="TEST")
+	void TestFuncRetVal(FName Name);
+
+
 private:
 
 	UPROPERTY(Replicated)
