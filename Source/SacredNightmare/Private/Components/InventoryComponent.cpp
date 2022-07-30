@@ -29,20 +29,20 @@ void UInventoryComponent::Server_AddItemToInventory_Implementation(FItemStruct I
 	{
 		if(InventoryArray.Num() > 0)
 		{
-			int itemIndex = 0;
+			int ItemIndex = 0;
 			bool bIsItemFound = false;
 			
 			for(int i = 0; i < InventoryArray.Num(); i++)
 			{
 				if(InventoryArray[i].ItemName == ItemAdded.ItemName)
 				{
-					itemIndex = i;
+					ItemIndex = i;
 					bIsItemFound = true;
 					break;
 				}
 			}
 
-			if(bIsItemFound) InventoryArray[itemIndex].ItemCount = InventoryArray[itemIndex].ItemCount + ItemAdded.ItemCount;
+			if(bIsItemFound) InventoryArray[ItemIndex].ItemCount = InventoryArray[ItemIndex].ItemCount + ItemAdded.ItemCount;
 			else InventoryArray.Add(ItemAdded);
 		}
 		else InventoryArray.Add(ItemAdded);
@@ -75,13 +75,13 @@ void UInventoryComponent::RemoveItemFromInventory(FName ItemName, bool RemoveAll
 void UInventoryComponent::Server_RemoveItemFromInventory_Implementation(FName ItemName, bool RemoveAll, int Count)
 {
 	bool bIsItemFound = false;
-	int itemIndex = 0;
+	int ItemIndex = 0;
 
 	for(int i = 0; i < InventoryArray.Num(); i++)
 	{
 		if(InventoryArray[i].ItemName == ItemName)
 		{
-			itemIndex = i;
+			ItemIndex = i;
 			bIsItemFound = true;
 			
 			break;
@@ -92,14 +92,14 @@ void UInventoryComponent::Server_RemoveItemFromInventory_Implementation(FName It
 	{
 		if(!RemoveAll)
 		{
-			InventoryArray[itemIndex].ItemCount = InventoryArray[itemIndex].ItemCount - Count;
-			InventoryArray[itemIndex].ItemCount = FMath::Max(InventoryArray[itemIndex].ItemCount, 0);
+			InventoryArray[ItemIndex].ItemCount = InventoryArray[ItemIndex].ItemCount - Count;
+			InventoryArray[ItemIndex].ItemCount = FMath::Max(InventoryArray[ItemIndex].ItemCount, 0);
 
-			if(InventoryArray[itemIndex].ItemCount <= 0) InventoryArray.RemoveAt(itemIndex);
+			if(InventoryArray[ItemIndex].ItemCount <= 0) InventoryArray.RemoveAt(ItemIndex);
 		}
 		else
 		{
-			InventoryArray.RemoveAt(itemIndex);
+			InventoryArray.RemoveAt(ItemIndex);
 		}
 	}
 }
