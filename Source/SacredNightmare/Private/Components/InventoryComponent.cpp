@@ -53,6 +53,8 @@ bool UInventoryComponent::Server_AddItemToInventory_Validate(FItemStruct ItemAdd
 
 void UInventoryComponent::FindItemInInventoryByName(FName ItemName, bool& ItemFound, FItemStruct& Item)
 {
+	ItemFound = false;
+	
 	for(int i = 0; i < InventoryArray.Num(); i++)
 	{
 		if(InventoryArray[i].ItemName == ItemName)
@@ -63,4 +65,16 @@ void UInventoryComponent::FindItemInInventoryByName(FName ItemName, bool& ItemFo
 			break;
 		}
 	}
+}
+
+void UInventoryComponent::TestFuncRetVal(FName Name)
+{
+	bool bTeB = false;
+	FItemStruct testItem;
+	
+	FindItemInInventoryByName(Name, bTeB, testItem);
+
+
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Magenta, bTeB? "True" : "False");
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Magenta, FString::FromInt(testItem.ItemCount));
 }
