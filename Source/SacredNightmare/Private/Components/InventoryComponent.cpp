@@ -105,16 +105,3 @@ void UInventoryComponent::Server_RemoveItemFromInventory_Implementation(FName It
 }
 
 bool UInventoryComponent::Server_RemoveItemFromInventory_Validate(FName ItemName, bool RemoveAll, int Count) { return true; }
-
-void UInventoryComponent::TestFuncRetVal(FName Name)
-{
-	bool bTeB = false;
-	FItemStruct testItem;
-	
-	FindItemInInventoryByName(Name, bTeB, testItem);
-
-
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Magenta, bTeB? "True" : "False");
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Magenta, FString::FromInt(testItem.ItemCount));
-}
-
