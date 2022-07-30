@@ -4,6 +4,8 @@
 
 ABuildingActor::ABuildingActor()
 {
+	bReplicates = true;
+	
 	BuildingCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("BuildingCollision"));
 	BuildingCollision->SetupAttachment(RootComponent);
 
