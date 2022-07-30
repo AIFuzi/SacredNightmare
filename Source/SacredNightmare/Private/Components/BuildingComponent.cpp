@@ -1,34 +1,41 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "Components/BuildingComponent.h"
+#include "Components/InventoryComponent.h"
 
-// Sets default values for this component's properties
 UBuildingComponent::UBuildingComponent()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
 
-	// ...
 }
 
-
-// Called when the game starts
-void UBuildingComponent::BeginPlay()
+void UBuildingComponent::FindItemForBuilding(UInventoryComponent* InventoryComponent,
+	TArray<FBuildingStruct> NeedItems, bool& IsItemFound, TArray<FItemStruct>& Items)
 {
-	Super::BeginPlay();
+	if(InventoryComponent)
+	{
+		bool bItemFound = false;
+		FItemStruct FoundItem;
+		
+		bool bIsItemsForBuildFound = false;
+		TArray<FItemStruct> ItemsForBuild;
 
-	// ...
-	
+		for(int i = 0; i < NeedItems.Num(); i++)
+		{
+			InventoryComponent->FindItemInInventoryByName(NeedItems[i].ItemName, bItemFound, FoundItem);
+
+			if(!bItemFound || FoundItem.ItemCount < NeedItems[i].Count)
+			{
+				bIsItemsForBuildFound = false;
+				break;
+			}
+			else
+			{
+				ItemsForBuild.Add(FoundItem);
+				bIsItemsForBuildFound = true;
+			}
+		}
+
+		IsItemFound = bIsItemsForBuildFound;
+		Items = ItemsForBuild;
+	}
 }
 
-
-// Called every frame
-void UBuildingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
-}
 
