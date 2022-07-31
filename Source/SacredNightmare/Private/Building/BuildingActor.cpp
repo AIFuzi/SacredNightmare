@@ -15,17 +15,17 @@ ABuildingActor::ABuildingActor()
 	BuildingMesh->SetupAttachment(BuildingCollision);
 }
 
-void ABuildingActor::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
-
 void ABuildingActor::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(ABuildingActor, PlayerOwner);
+}
+
+void ABuildingActor::BeginPlay()
+{
+	Super::BeginPlay();
+	
 }
 
 void ABuildingActor::OnRep_PlayerOwner()
