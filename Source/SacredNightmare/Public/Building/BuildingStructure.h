@@ -7,10 +7,10 @@ struct FBuildingStruct
 {
 	GENERATED_BODY()
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="NeedItem")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="NeedItem")
 	FName ItemName;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="NeedItem")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="NeedItem")
 	int Count;
 	
 };
