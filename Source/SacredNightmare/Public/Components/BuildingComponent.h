@@ -50,6 +50,12 @@ public:
 	UFUNCTION(BlueprintPure, Category="Building")
 	bool IsActivateBuildingMode() const;
 
+	UFUNCTION(BlueprintCallable, Category="Building")
+	void RotateBuilding();
+
+	UFUNCTION(Unreliable, Server, WithValidation, Category="Building_RPC")
+	void Server_RotateBuilding();
+
 private:
 
 	FTimerHandle UpdatePreviewObjectLocationTimer;

@@ -173,3 +173,18 @@ bool UBuildingComponent::IsActivateBuildingMode() const
 {
 	return bIsBuildingModeActivate;
 }
+
+void UBuildingComponent::RotateBuilding()
+{
+	Server_RotateBuilding();
+}
+
+void UBuildingComponent::Server_RotateBuilding_Implementation()
+{
+	if(PreviewBuildingObject)
+	{
+		PreviewBuildingObject->AddActorWorldRotation(FRotator(0.f, 90.f, 0.f));
+	}
+}
+
+bool UBuildingComponent::Server_RotateBuilding_Validate() { return true; }
