@@ -94,8 +94,10 @@ void UBuildingComponent::Server_SpawnPreviewBuilding_Implementation(TSubclassOf<
 			{
 				FActorSpawnParameters SpawnParameters;
 				SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-
-				GetWorld()->SpawnActor<ABuildingActor>(BuildingClass ,PreviewBuildingObject->GetActorLocation(), PreviewBuildingObject->GetActorRotation(), SpawnParameters);
+				
+				if(const ABuildingActor* Building = GetWorld()->SpawnActor<ABuildingActor>(BuildingClass ,PreviewBuildingObject->GetActorLocation(), PreviewBuildingObject->GetActorRotation(), SpawnParameters))
+					//Building->BuildingCollision->DestroyComponent();
+					Building->OnSpawnBuildingInWorld.Broadcast();
 			}
 		}
 	}
