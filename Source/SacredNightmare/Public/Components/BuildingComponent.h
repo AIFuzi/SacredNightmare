@@ -24,10 +24,10 @@ public:
 	void FindItemForBuilding(class UInventoryComponent* InventoryComponent, TArray<FBuildingStruct> NeedItems, bool& IsItemFound, TArray<FItemStruct>& Items);
 
 	UFUNCTION(BlueprintCallable, Category="Building")
-	void SpawnPreviewBuilding(TSubclassOf<class ABuildingActor> BuildingClass, UMaterialInterface* PreviewMaterial);
+	void SpawnPreviewBuilding(TSubclassOf<class ABuildingActor> BuildingClass, UMaterialInterface* PreviewMaterial, UInventoryComponent* InventoryComponent);
 
 	UFUNCTION(Unreliable, Server, WithValidation, Category="Building_RPC")
-	void Server_SpawnPreviewBuilding(TSubclassOf<class ABuildingActor> BuildingClass, UMaterialInterface* PreviewMaterial);
+	void Server_SpawnPreviewBuilding(TSubclassOf<class ABuildingActor> BuildingClass, UMaterialInterface* PreviewMaterial, UInventoryComponent* InventoryComponent);
 
 	UFUNCTION(BlueprintCallable, Category="Building")
 	void DestroyPreviewBuilding();
@@ -39,7 +39,16 @@ public:
 	void Multicast_CreatePreviewMaterial(UStaticMeshComponent* PreviewMeshTarget, UMaterialInterface* PreviewMaterial);
 
 	UFUNCTION(BlueprintCallable, Category="Building")
-	void SetPreviewColor(bool IsSpawn);
+	void SetIsSpawnBuilding(bool IsSpawn);
+
+	UFUNCTION(Unreliable, NetMulticast, WithValidation, Category="Building_RPC")
+	void Multicast_SetIsSpawnBuilding(bool IsSpawn);
+
+	UFUNCTION(BlueprintCallable, Category="Building")
+	void ActivateBuildingMode(bool Activate);
+
+	UFUNCTION(BlueprintPure, Category="Building")
+	bool IsActivateBuildingMode() const;
 
 private:
 
@@ -50,5 +59,11 @@ private:
 	UMaterialInstanceDynamic* PreviewDynamic;
 
 	void UpdatePreviewObjectLocation() const;
+
+	bool bIsAbleToBuild = true;
+	bool bIsBuildingModeActivate = false;
+
+	UPROPERTY(Replicated)
+	bool bIsItemsFoundForBuild = false;
 	
 };
