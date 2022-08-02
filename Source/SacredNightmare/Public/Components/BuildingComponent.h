@@ -59,12 +59,13 @@ public:
 private:
 
 	FTimerHandle UpdatePreviewObjectLocationTimer;
-
+	
 	ABuildingActor* PreviewBuildingObject;
 	
 	UMaterialInstanceDynamic* PreviewDynamic;
 
 	void UpdatePreviewObjectLocation() const;
+	void RemoveBuildingItems(UInventoryComponent* InventoryComponent, TArray<FBuildingStruct> BuildingItems);
 
 	bool bIsAbleToBuild = true;
 	bool bIsBuildingModeActivate = false;

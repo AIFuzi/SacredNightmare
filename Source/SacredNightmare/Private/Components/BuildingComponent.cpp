@@ -96,8 +96,12 @@ void UBuildingComponent::Server_SpawnPreviewBuilding_Implementation(TSubclassOf<
 				SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 				
 				if(const ABuildingActor* Building = GetWorld()->SpawnActor<ABuildingActor>(BuildingClass ,PreviewBuildingObject->GetActorLocation(), PreviewBuildingObject->GetActorRotation(), SpawnParameters))
-					//Building->BuildingCollision->DestroyComponent();
+				{
+					RemoveBuildingItems(InventoryComponent, Building->NeedItemForBuild);
+					DestroyPreviewBuilding();
+					
 					Building->OnSpawnBuildingInWorld.Broadcast();
+				}
 			}
 		}
 	}
@@ -190,3 +194,11 @@ void UBuildingComponent::Server_RotateBuilding_Implementation()
 }
 
 bool UBuildingComponent::Server_RotateBuilding_Validate() { return true; }
+
+void UBuildingComponent::RemoveBuildingItems(UInventoryComponent* InventoryComponent, TArray<FBuildingStruct> BuildingItems)
+{
+	for (int i = 0; i < BuildingItems.Num(); i++)
+	{
+		InventoryComponent->RemoveItemFromInventory(BuildingItems[i].ItemName, false, BuildingItems[i].Count);
+	}
+}
