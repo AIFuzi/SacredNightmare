@@ -19,6 +19,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Building")
 	float PreviewDistance;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Building")
+	class AGridManager* GridManager;
 	
 	UFUNCTION(BlueprintPure, Category="Building")
 	void FindItemForBuilding(class UInventoryComponent* InventoryComponent, TArray<FBuildingStruct> NeedItems, bool& IsItemFound, TArray<FItemStruct>& Items);
@@ -59,12 +62,13 @@ public:
 private:
 
 	FTimerHandle UpdatePreviewObjectLocationTimer;
-
+	
 	ABuildingActor* PreviewBuildingObject;
 	
 	UMaterialInstanceDynamic* PreviewDynamic;
 
 	void UpdatePreviewObjectLocation() const;
+	void RemoveBuildingItems(UInventoryComponent* InventoryComponent, TArray<FBuildingStruct> BuildingItems);
 
 	bool bIsAbleToBuild = true;
 	bool bIsBuildingModeActivate = false;

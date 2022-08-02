@@ -13,6 +13,13 @@ void UInventoryComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& 
 	DOREPLIFETIME(UInventoryComponent, InventoryArray);
 }
 
+void UInventoryComponent::BeginPlay()
+{
+	Super::BeginPlay();
+
+	SpawnBeginItems();
+}
+
 TArray<FItemStruct> UInventoryComponent::GetInventoryInfo()
 {
 	return InventoryArray;
@@ -105,3 +112,11 @@ void UInventoryComponent::Server_RemoveItemFromInventory_Implementation(FName It
 }
 
 bool UInventoryComponent::Server_RemoveItemFromInventory_Validate(FName ItemName, bool RemoveAll, int Count) { return true; }
+
+void UInventoryComponent::SpawnBeginItems()
+{
+	for(int i = 0; i < BeginItems.Num(); i++)
+	{
+		AddItemToInventory(BeginItems[i]);
+	}
+}

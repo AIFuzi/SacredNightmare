@@ -3,7 +3,9 @@
 #include "Building/BuildingActor.h"
 #include "Characters/PlayerCharacter.h"
 #include "Components/BoxComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Net/UnrealNetwork.h"
+#include "Objects/GridManager.h"
 
 UBuildingComponent::UBuildingComponent()
 {
@@ -96,8 +98,12 @@ void UBuildingComponent::Server_SpawnPreviewBuilding_Implementation(TSubclassOf<
 				SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 				
 				if(const ABuildingActor* Building = GetWorld()->SpawnActor<ABuildingActor>(BuildingClass ,PreviewBuildingObject->GetActorLocation(), PreviewBuildingObject->GetActorRotation(), SpawnParameters))
-					//Building->BuildingCollision->DestroyComponent();
+				{
+					RemoveBuildingItems(InventoryComponent, Building->NeedItemForBuild);
+					DestroyPreviewBuilding();
+					
 					Building->OnSpawnBuildingInWorld.Broadcast();
+				}
 			}
 		}
 	}
@@ -139,7 +145,13 @@ void UBuildingComponent::UpdatePreviewObjectLocation() const
 {
 	const FVector NewLocationXY = GetOwner()->GetActorLocation() + GetOwner()->GetActorForwardVector() * PreviewDistance;
 	const FVector NewLocationZ = GetOwner()->GetActorLocation() + PreviewBuildingObject->BuildingCollision->GetScaledBoxExtent().Z / 2.f;
-	PreviewBuildingObject->SetActorLocation(FVector(NewLocationXY.X, NewLocationXY.Y, NewLocationZ.Z));
+
+	if(GridManager)
+	{
+		const FVector GridPos = GridManager->GetClosestGridPosition(FVector(NewLocationXY.X, NewLocationXY.Y, NewLocationZ.Z));
+		PreviewBuildingObject->SetActorLocation(FVector(GridPos.X, GridPos.Y, NewLocationZ.Z));
+	}
+	else PreviewBuildingObject->SetActorLocation(FVector(NewLocationXY.X, NewLocationXY.Y, NewLocationZ.Z));
 }
 
 void UBuildingComponent::SetIsSpawnBuilding(bool IsSpawn)
@@ -190,3 +202,11 @@ void UBuildingComponent::Server_RotateBuilding_Implementation()
 }
 
 bool UBuildingComponent::Server_RotateBuilding_Validate() { return true; }
+
+void UBuildingComponent::RemoveBuildingItems(UInventoryComponent* InventoryComponent, TArray<FBuildingStruct> BuildingItems)
+{
+	for (int i = 0; i < BuildingItems.Num(); i++)
+	{
+		InventoryComponent->RemoveItemFromInventory(BuildingItems[i].ItemName, false, BuildingItems[i].Count);
+	}
+}

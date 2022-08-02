@@ -15,6 +15,11 @@ public:
 	UInventoryComponent();
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+	virtual void BeginPlay() override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Inventory")
+	TArray<FItemStruct> BeginItems;
 	
 	UFUNCTION(BlueprintPure, Category="Inventory")
 	TArray<FItemStruct> GetInventoryInfo();
@@ -38,5 +43,7 @@ private:
 
 	UPROPERTY(Replicated)
 	TArray<FItemStruct> InventoryArray;
+
+	void SpawnBeginItems();
 	
 };
