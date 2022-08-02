@@ -13,6 +13,24 @@ public:
 
 	AGridManager();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Grid", meta=(ExposeOnSpawn = "true"))
+	int GridSize;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Grid", meta=(ExposeOnSpawn = "true"))
+	int WorldGridSize;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Grid", meta=(ExposeOnSpawn = "true"))
+	TSubclassOf<AActor> GridCell;
+
+	UFUNCTION(BlueprintCallable, Category="Grid")
+	void CreateGridWorld();
+
+	UFUNCTION(BlueprintPure, Category="Grid")
+	FVector GetClosestGridPosition(FVector InPosition);
+	
+private:
+
+	UPROPERTY()
+	TArray<AActor*> GridArray;
+	
 };
