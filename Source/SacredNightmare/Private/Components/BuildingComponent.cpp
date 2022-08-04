@@ -17,6 +17,7 @@ void UBuildingComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& O
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(UBuildingComponent, bIsItemsFoundForBuild);
+	DOREPLIFETIME(UBuildingComponent, PreviewBuildingObject);
 }
 
 void UBuildingComponent::FindItemForBuilding(UInventoryComponent* InventoryComponent,
@@ -82,6 +83,7 @@ void UBuildingComponent::Server_SpawnPreviewBuilding_Implementation(TSubclassOf<
 				bIsItemsFoundForBuild = bIsItemsFound;
 
 				SetIsSpawnBuilding(bIsItemsFound);
+				Multicast_SetBuildingCollision();
 			
 				if(APlayerCharacter* PlayerOwner = Cast<APlayerCharacter>(GetOwner()))
 				{
@@ -210,3 +212,39 @@ void UBuildingComponent::RemoveBuildingItems(UInventoryComponent* InventoryCompo
 		InventoryComponent->RemoveItemFromInventory(BuildingItems[i].ItemName, false, BuildingItems[i].Count);
 	}
 }
+
+void UBuildingComponent::DestroyBuilding(ABuildingActor* Building, UInventoryComponent* InventoryComponent)
+{
+	if(Building && InventoryComponent)
+	{
+		for(int i = 0; i < Building->NeedItemForBuild.Num(); i++)
+		{
+			FItemStruct ItemStruct;
+			ItemStruct.ItemName = Building->NeedItemForBuild[i].ItemName;
+			ItemStruct.ItemCount = Building->NeedItemForBuild[i].Count;
+			ItemStruct.MiningCondition = 0;
+			ItemStruct.RegenRate = 0;
+			
+			InventoryComponent->AddItemToInventory(ItemStruct);
+		}
+
+		Building->Destroy();
+	}
+}
+
+void UBuildingComponent::Multicast_SetBuildingCollision_Implementation()
+{
+	if(PreviewBuildingObject) PreviewBuildingObject->BuildingMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+}
+
+bool UBuildingComponent::Multicast_SetBuildingCollision_Validate() { return true; }
+
+ABuildingActor* UBuildingComponent::GetPreviewBuilding() const
+{
+	return  PreviewBuildingObject;
+}
+
+
+
+
+
