@@ -183,6 +183,7 @@ bool UBuildingComponent::Multicast_SetIsSpawnBuilding_Validate(bool IsSpawn) { r
 void UBuildingComponent::ActivateBuildingMode(bool Activate)
 {
 	bIsBuildingModeActivate = Activate;
+	//SetVisibilityBuildingGrid(!Activate);
 }
 
 bool UBuildingComponent::IsActivateBuildingMode() const
@@ -244,6 +245,15 @@ ABuildingActor* UBuildingComponent::GetPreviewBuilding() const
 	return  PreviewBuildingObject;
 }
 
+void UBuildingComponent::SetVisibilityBuildingGrid_Implementation(bool bIsHidden)
+{
+	TArray<AActor*> GridCells;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), GridManager->GridCell->GetClass(), GridCells);
+
+	for(int i = 0; i < GridCells.Num(); i++) GridCells[i]->SetActorHiddenInGame(bIsHidden);
+}
+
+bool UBuildingComponent::SetVisibilityBuildingGrid_Validate(bool bIsHidden) { return true; }
 
 
 
