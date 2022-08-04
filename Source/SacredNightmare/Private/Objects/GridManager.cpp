@@ -14,18 +14,17 @@ void AGridManager::CreateGridWorld()
 	{
 		for(int x = 0; x < GridSize; x++)
 		{
-			int xG = (x * WorldGridSize) * FMath::TruncToInt(WorldOffset);
-			int yG = (y * WorldGridSize) * FMath::TruncToInt(WorldOffset);
+			const int XGrid = (x * WorldGridSize) * FMath::TruncToInt(WorldOffset);
+			const int YGrid = (y * WorldGridSize) * FMath::TruncToInt(WorldOffset);
 
-			FVector SLoc = FVector(xG, yG, GetActorLocation().Z) + GetActorLocation();
+			FVector SLoc = FVector(XGrid, YGrid, GetActorLocation().Z) + GetActorLocation();
 
 			FActorSpawnParameters SpawnParameters;
 			SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-
 			
 			if(AActor* GridHelper = GetWorld()->SpawnActor<AActor>(GridCell, SLoc, FRotator(0, 0, 0), SpawnParameters))
 			{
-				GridHelper->SetActorHiddenInGame(true);
+				GridHelper->SetActorHiddenInGame(false);
 				GridHelper->SetActorEnableCollision(false);
 				
 				GridArray.Add(GridHelper);
