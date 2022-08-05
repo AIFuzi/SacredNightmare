@@ -59,10 +59,23 @@ public:
 	UFUNCTION(Unreliable, Server, WithValidation, Category="Building_RPC")
 	void Server_RotateBuilding();
 
+	UFUNCTION(BlueprintCallable, Category="Building")
+	void DestroyBuilding(ABuildingActor* Building, UInventoryComponent* InventoryComponent);
+
+	UFUNCTION(Unreliable, NetMulticast, WithValidation, Category="Building_RPC")
+	void Multicast_SetBuildingCollision();
+
+	UFUNCTION(BlueprintPure, Category="Building")
+	ABuildingActor* GetPreviewBuilding() const;
+
+	UFUNCTION(Unreliable, Client, WithValidation, Category="Building_RPC")
+	void SetVisibilityBuildingGrid(bool bIsHidden);
+	
 private:
 
 	FTimerHandle UpdatePreviewObjectLocationTimer;
-	
+
+	UPROPERTY(Replicated)
 	ABuildingActor* PreviewBuildingObject;
 	
 	UMaterialInstanceDynamic* PreviewDynamic;
