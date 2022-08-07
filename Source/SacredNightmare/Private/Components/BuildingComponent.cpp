@@ -183,7 +183,6 @@ bool UBuildingComponent::Multicast_SetIsSpawnBuilding_Validate(bool IsSpawn) { r
 void UBuildingComponent::ActivateBuildingMode(bool Activate)
 {
 	bIsBuildingModeActivate = Activate;
-	//SetVisibilityBuildingGrid(!Activate);
 }
 
 bool UBuildingComponent::IsActivateBuildingMode() const
@@ -198,20 +197,14 @@ void UBuildingComponent::RotateBuilding()
 
 void UBuildingComponent::Server_RotateBuilding_Implementation()
 {
-	if(PreviewBuildingObject)
-	{
-		PreviewBuildingObject->AddActorWorldRotation(FRotator(0.f, 90.f, 0.f));
-	}
+	if(PreviewBuildingObject) PreviewBuildingObject->AddActorWorldRotation(FRotator(0.f, 90.f, 0.f));
 }
 
 bool UBuildingComponent::Server_RotateBuilding_Validate() { return true; }
 
 void UBuildingComponent::RemoveBuildingItems(UInventoryComponent* InventoryComponent, TArray<FBuildingStruct> BuildingItems)
 {
-	for (int i = 0; i < BuildingItems.Num(); i++)
-	{
-		InventoryComponent->RemoveItemFromInventory(BuildingItems[i].ItemName, false, BuildingItems[i].Count);
-	}
+	for (int i = 0; i < BuildingItems.Num(); i++) InventoryComponent->RemoveItemFromInventory(BuildingItems[i].ItemName, false, BuildingItems[i].Count);
 }
 
 void UBuildingComponent::DestroyBuilding(ABuildingActor* Building, UInventoryComponent* InventoryComponent)
@@ -220,13 +213,17 @@ void UBuildingComponent::DestroyBuilding(ABuildingActor* Building, UInventoryCom
 	{
 		for(int i = 0; i < Building->NeedItemForBuild.Num(); i++)
 		{
-			FItemStruct ItemStruct;
-			ItemStruct.ItemName = Building->NeedItemForBuild[i].ItemName;
-			ItemStruct.ItemCount = Building->NeedItemForBuild[i].Count;
-			ItemStruct.MiningCondition = 0;
-			ItemStruct.RegenRate = 0;
+			if(Building->NeedItemForBuild[i].Count / 2 > 0)
+			{
+				FItemStruct ItemStruct;
+				
+				ItemStruct.ItemName = Building->NeedItemForBuild[i].ItemName;
+				ItemStruct.ItemCount = Building->NeedItemForBuild[i].Count / 2;
+				ItemStruct.MiningCondition = 0;
+				ItemStruct.RegenRate = 0;
 			
-			InventoryComponent->AddItemToInventory(ItemStruct);
+				InventoryComponent->AddItemToInventory(ItemStruct);
+			}
 		}
 
 		Building->Destroy();
@@ -242,19 +239,6 @@ bool UBuildingComponent::Multicast_SetBuildingCollision_Validate() { return true
 
 ABuildingActor* UBuildingComponent::GetPreviewBuilding() const
 {
-	return  PreviewBuildingObject;
+	return PreviewBuildingObject;
 }
-
-void UBuildingComponent::SetVisibilityBuildingGrid_Implementation(bool bIsHidden)
-{
-	TArray<AActor*> GridCells;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), GridManager->GridCell->GetClass(), GridCells);
-
-	for(int i = 0; i < GridCells.Num(); i++) GridCells[i]->SetActorHiddenInGame(bIsHidden);
-}
-
-bool UBuildingComponent::SetVisibilityBuildingGrid_Validate(bool bIsHidden) { return true; }
-
-
-
 
