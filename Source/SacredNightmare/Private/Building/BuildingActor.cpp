@@ -3,6 +3,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "Net/UnrealNetwork.h"
 #include "Characters/PlayerCharacter.h"
+#include "Components/HealthComponent.h"
 
 ABuildingActor::ABuildingActor()
 {
@@ -13,6 +14,8 @@ ABuildingActor::ABuildingActor()
 
 	BuildingMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BuildingMesh"));
 	BuildingMesh->SetupAttachment(BuildingCollision);
+
+	BuildingHealth = CreateDefaultSubobject<UHealthComponent>(TEXT("BuildingHealth"));
 }
 
 void ABuildingActor::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

@@ -43,6 +43,9 @@ public:
 	UPROPERTY(ReplicatedUsing = OnRep_PlayerOwner)
 	class APlayerCharacter* PlayerOwner;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Health")
+	class UHealthComponent* BuildingHealth;
+
 	UFUNCTION()
 	void OnRep_PlayerOwner();
 
