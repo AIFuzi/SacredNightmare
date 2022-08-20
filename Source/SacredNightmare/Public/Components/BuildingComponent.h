@@ -67,9 +67,6 @@ public:
 
 	UFUNCTION(BlueprintPure, Category="Building")
 	ABuildingActor* GetPreviewBuilding() const;
-
-	UFUNCTION(Unreliable, Client, WithValidation, Category="Building_RPC")
-	void SetVisibilityBuildingGrid(bool bIsHidden);
 	
 private:
 

@@ -25,6 +25,9 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &APlayerCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &APlayerCharacter::MoveRight);
+
+	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &APlayerCharacter::StartSprint);
+	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &APlayerCharacter::StopSprint);
 }
 
 void APlayerCharacter::MoveForward(float Value)
@@ -48,3 +51,36 @@ void APlayerCharacter::MoveRight(float Value)
 		AddMovementInput(Direction, Value);
 	}
 }
+
+void APlayerCharacter::StartSprint()
+{
+	Server_StartSprint();
+}
+
+void APlayerCharacter::StopSprint()
+{
+	Server_StopSprint();
+}
+
+void APlayerCharacter::Server_StartSprint_Implementation()
+{
+	GetCharacterMovement()->MaxWalkSpeed = RunSpeed;
+	Multicast_UpdateCurrentSpeed(RunSpeed);
+}
+
+bool APlayerCharacter::Server_StartSprint_Validate()  { return true; }
+
+void APlayerCharacter::Server_StopSprint_Implementation()
+{
+	GetCharacterMovement()->MaxWalkSpeed = WalkingSpeed;
+	Multicast_UpdateCurrentSpeed(WalkingSpeed);
+}
+
+bool APlayerCharacter::Server_StopSprint_Validate() { return true; }
+
+void APlayerCharacter::Multicast_UpdateCurrentSpeed_Implementation(float UpdateSpeed)
+{
+	GetCharacterMovement()->MaxWalkSpeed = UpdateSpeed;
+}
+
+bool APlayerCharacter::Multicast_UpdateCurrentSpeed_Validate(float UpdateSpeed) { return true; }
