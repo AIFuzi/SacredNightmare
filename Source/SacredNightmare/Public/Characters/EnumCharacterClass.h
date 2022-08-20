@@ -5,6 +5,8 @@
 UENUM(BlueprintType)
 enum class EPlayerClassType : uint8
 {
-	ENone			UMETA(DisplayName = "None"),
-	EHero			UMETA(DisplayName = "Hero")
+	EHuman				UMETA(DisplayName = "Human"),
+	EArcher				UMETA(DisplayName = "Archer"),
+	ESwordsman			UMETA(DisplayName = "Swordsman"),
+	EMage				UMETA(DisplayName = "Mage")
 };
