@@ -9,11 +9,6 @@ class SACREDNIGHTMARE_API APlayerCharacter : public ABaseCharacter
 {
 	GENERATED_BODY()
 
-private:
-
-	void MoveForward(float Value);
-	void MoveRight(float Value);
-
 protected:
 
 	virtual void BeginPlay() override;
@@ -29,4 +24,22 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="PlayerAssets")
 	class UCameraComponent* PlayerCamera;
+
+	UFUNCTION(Unreliable, Server, WithValidation, Category="Movement")
+	void Server_StartSprint();
+
+	UFUNCTION(Unreliable, Server, WithValidation, Category="Movement")
+	void Server_StopSprint();
+
+	UFUNCTION(Unreliable, NetMulticast, WithValidation, Category="Movement")
+	void Multicast_UpdateCurrentSpeed(float UpdateSpeed);
+
+private:
+
+	void MoveForward(float Value);
+	void MoveRight(float Value);
+
+	void StartSprint();
+	void StopSprint();
+	
 };
