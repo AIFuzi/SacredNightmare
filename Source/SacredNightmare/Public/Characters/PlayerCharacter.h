@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Characters/BaseCharacter.h"
+#include "EnumCharacterClass.h"
 #include "PlayerCharacter.generated.h"
 
 UCLASS()
@@ -24,6 +25,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="PlayerAssets")
 	class UCameraComponent* PlayerCamera;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Player")
+	EPlayerClassType PlayerClassType;
 
 	UFUNCTION(Unreliable, Server, WithValidation, Category="Movement")
 	void Server_StartSprint();
