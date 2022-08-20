@@ -13,7 +13,15 @@ public:
 
 	AWeaponActor();
 
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Weapon")
 	UStaticMeshComponent* WeaponMesh;
+
+	UPROPERTY(ReplicatedUsing = OnRep_WeaponOwner)
+	class APlayerCharacter* WeaponOwner;
+
+	UFUNCTION()
+	void OnRep_WeaponOwner();
 
 };
